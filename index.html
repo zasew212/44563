@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ATELIER</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+html {scroll-behavior: smooth;}
+body {
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:#0e0e0e;
+  color:#fff;
+  overflow-x:hidden;
+}
+
+/* SMOOTH SCROLL WRAPPER */
+.scroll {
+  will-change: transform;
+}
+
+/* HERO */
+.hero {
+  height:120vh;
+  display:flex;
+  align-items:center;
+  padding:0 10vw;
+}
+
+.hero h1 {
+  font-size:9vw;
+  font-weight:400;
+  line-height:1;
+}
+
+/* SECTION */
+.section {
+  padding:20vh 10vw;
+}
+
+.split {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5vw;
+  align-items:center;
+}
+
+.split img {
+  width:100%;
+  height:80vh;
+  object-fit:cover;
+}
+
+.text-block {
+  font-size:2vw;
+  line-height:1.4;
+  opacity:0;
+  transform:translateY(100px);
+  transition:1.2s;
+}
+
+.text-block.visible {
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* BIG TEXT */
+.big {
+  font-size:6vw;
+  margin:20vh 0;
+}
+
+/* PRODUCT GRID */
+.products {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2vw;
+}
+
+.card img {
+  width:100%;
+  height:50vh;
+  object-fit:cover;
+  transition:0.7s;
+}
+
+.card:hover img {
+  transform:scale(1.05);
+}
+
+/* CART */
+.cart {
+  position:fixed;
+  right:0;
+  top:0;
+  width:400px;
+  height:100%;
+  background:#fff;
+  color:#000;
+  padding:40px;
+  transform:translateX(100%);
+  transition:0.6s;
+  z-index:100;
+}
+
+.cart.active {
+  transform:translateX(0);
+}
+
+button {
+  margin-top:10px;
+  padding:10px 20px;
+  border:none;
+  cursor:pointer;
+}
+
+/* FADE */
+.fade {
+  opacity:0;
+  transform:translateY(80px);
+  transition:1s;
+}
+
+.fade.visible {
+  opacity:1;
+  transform:translateY(0);
+}
+</style>
+</head>
+
+<body>
+
+<div class="scroll">
+
+<section class="hero">
+  <h1>Form.
+Silence.
+Material.</h1>
+</section>
+
+<section class="section split">
+  <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d">
+  <div class="text-block fade">
+    Мы создаём одежду вне времени.  
+    Без шума. Без лишнего.  
+  </div>
+</section>
+
+<div class="section big fade">
+  Designed for stillness.
+</div>
+
+<section class="section products">
+
+  <div class="card fade">
+    <img src="https://images.unsplash.com/photo-1520975922328-8b456906c813">
+    <p>Рубашка — 4990 ₽</p>
+    <button onclick="addToCart('Рубашка',4990)">Добавить</button>
+  </div>
+
+  <div class="card fade">
+    <img src="https://images.unsplash.com/photo-1519741497674-611481863552">
+    <p>Брюки — 6990 ₽</p>
+    <button onclick="addToCart('Брюки',6990)">Добавить</button>
+  </div>
+
+  <div class="card fade">
+    <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b">
+    <p>Футболка — 3490 ₽</p>
+    <button onclick="addToCart('Футболка',3490)">Добавить</button>
+  </div>
+
+</section>
+
+<div class="section big fade">
+  Less, but better.
+</div>
+
+</div>
+
+<div class="cart" id="cart">
+  <h2>Корзина</h2>
+  <ul id="cartItems"></ul>
+  <p id="total"></p>
+  <button onclick="checkout()">Оформить</button>
+</div>
+
+<button onclick="toggleCart()" style="position:fixed;top:20px;right:20px;">🛒</button>
+
+<script>
+
+/* FADE ON SCROLL */
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+    }
+  });
+});
+document.querySelectorAll('.fade').forEach(el=>observer.observe(el));
+
+/* CART */
+let cart = [];
+
+function addToCart(name, price){
+  cart.push({name, price});
+  renderCart();
+}
+
+function renderCart(){
+  let list = document.getElementById('cartItems');
+  let total = 0;
+  list.innerHTML = "";
+
+  cart.forEach(item=>{
+    total += item.price;
+    let li = document.createElement("li");
+    li.textContent = item.name + " - " + item.price + "₽";
+    list.appendChild(li);
+  });
+
+  document.getElementById('total').textContent = "Итого: " + total + "₽";
+}
+
+function toggleCart(){
+  document.getElementById('cart').classList.toggle('active');
+}
+
+function checkout(){
+  alert("Оплата через Telegram / ЮKassa позже");
+}
+
+</script>
+
+</body>
+</html>
